@@ -5,6 +5,8 @@ import 'package:instagram_clone001/firebase_options.dart';
 import 'package:instagram_clone001/homePage.dart';
 import 'package:instagram_clone001/state/auth/backend/authenticator.dart';
 import 'package:instagram_clone001/state/auth/providers/is_logged_in_provider.dart';
+import 'package:instagram_clone001/state/provider/is_loading_provider.dart';
+import 'package:instagram_clone001/views/components/loading/loading_screen.dart';
 
 
 void main() async {
@@ -40,6 +42,22 @@ class MyApp extends StatelessWidget{
       title: 'Insta-clone',
       home: Consumer(
         builder: (context, ref, child){
+          // take care of displaying the loading screen
+          ref.listen<bool>(
+            isLoadingProvider,
+            (_, isLoading) {
+              if(isLoading) {
+                LoadingScreen.instance().show(context: context,
+                );
+              } else {
+                LoadingScreen.instance().hide();
+              }
+            }
+          );
+
+
+
+
           final isLoggedIn = ref.watch(isLoggedInProvider);
           if(isLoggedIn) {
             return MainView();
